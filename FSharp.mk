@@ -20,6 +20,15 @@ endef
 
 $(foreach executable,$(filter %.exe,$(ASSEMBLIES)),$(eval $(call FSHARP_exe_template,$(executable))))
 
+# FSharp dll assembly template
+define FSHARP_dll_template =
+ $(OUTDIR)$(1): | $(OUTDIR)
+ $(OUTDIR)$(1): $$($(1)_sources)
+	$$(FSC) -a -o $$@ $$^
+endef
+
+$(foreach dll,$(filter %.dll,$(ASSEMBLIES)),$(eval $(call FSHARP_dll_template,$(dll))))
+
 # How to make a directory
 %/:
 	mkdir -p $@
