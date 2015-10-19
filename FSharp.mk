@@ -36,10 +36,11 @@ define FSHARP_template =
   $(OUTDIR)$(1): | $(OUTDIR)FSharp.Core.dll
   $(OUTDIR)$(1): $$(filter %.fs,$$($(1)_sources))
   $(OUTDIR)$(1): $$($(1)_nuget_dlls)
-  $(OUTDIR)$(1): $$(addprefix $(OUTDIR),$$(filter %.dll,$$($(1)_sources)))
+  $(OUTDIR)$(1): $$(addprefix $(OUTDIR),$$(filter-out -r:%,$$(filter %.dll,$$($(1)_sources))))
 	$$(FSC) -o:$$@\
 		$$(filter %.fs,$$^)\
 		$$(patsubst %,-r:%,$$(filter %.dll,$$^))\
+		$$(filter -r:%.dll,$$($(1)_sources))\
 		--nologo $(2)
  endif
 endef
