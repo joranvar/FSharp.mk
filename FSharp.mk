@@ -11,25 +11,16 @@ FSharp.Core.dll ?= /nix/store/9nvx5380w2md40yzr63hbyh22aafsw4j-fsharp-3.1.2.5/li
 fsharp: $(addprefix $(OUTDIR),$(ASSEMBLIES))
 
 # FSharp executable assembly template
-define FSHARP_exe_template =
+define FSHARP_template =
  $(OUTDIR)$(1): | $(OUTDIR)
  $(OUTDIR)$(1): $$(filter %.fs,$$($(1)_sources))
  $(OUTDIR)$(1): $$(addprefix $(OUTDIR),$$(filter %.dll,$$($(1)_sources)))
-	$$(FSC) -o $$@ $$(filter %.fs,$$^) $$(patsubst %,-r:%,$$(filter %.dll,$$^))
+	$$(FSC) $(2) -o $$@ $$(filter %.fs,$$^) $$(patsubst %,-r:%,$$(filter %.dll,$$^))
 	ln -sf $$(FSharp.Core.dll) $(OUTDIR)
 endef
 
-$(foreach executable,$(filter %.exe,$(ASSEMBLIES)),$(eval $(call FSHARP_exe_template,$(executable))))
-
-# FSharp dll assembly template
-define FSHARP_dll_template =
- $(OUTDIR)$(1): | $(OUTDIR)
- $(OUTDIR)$(1): $$(filter %.fs,$$($(1)_sources))
- $(OUTDIR)$(1): $$(addprefix $(OUTDIR),$$(filter %.dll,$$($(1)_sources)))
-	$$(FSC) -a -o $$@ $$(filter %.fs,$$^) $$(patsubst %,-r:%,$$(filter %.dll,$$^))
-endef
-
-$(foreach dll,$(filter %.dll,$(ASSEMBLIES)),$(eval $(call FSHARP_dll_template,$(dll))))
+$(foreach exe,$(filter %.exe,$(ASSEMBLIES)),$(eval $(call FSHARP_template,$(exe))))
+$(foreach dll,$(filter %.dll,$(ASSEMBLIES)),$(eval $(call FSHARP_template,$(dll),-a)))
 
 # How to make a directory
 %/:
