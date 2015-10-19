@@ -43,7 +43,7 @@ $(NUGET): | $(dir $(NUGET))
 
 # Nuget dependency template
 define NUGET_template =
- $(2): | $(NUGET) $(NUGETDIR)
+ $(sort $(2)): | $(NUGET) $(NUGETDIR)
 	$(MONO) $(NUGET) install -ExcludeVersion $(1) -OutputDirectory $(NUGETDIR)
 endef
 
