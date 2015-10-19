@@ -8,6 +8,8 @@ fsharp: $(ASSEMBLIES)
 
 # FSharp assembly template
 define FSHARP_template =
+ $(1): $(dir $(1))FSharp.Core.dll
+
  $(1): $$($(1)_sources)
 	$$(FSC) -o $$@ $$<
 endef
