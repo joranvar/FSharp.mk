@@ -57,4 +57,4 @@ F# command-line compiler (fsharpc) can be used with Makefiles in the usual way.
     As with all Make projects, you will need to provide a Makefile
     that describes the way that sources combine to your final
     assembly.  In this Makefile, you'll need to include the [[file:FSharp.mk][FSharp.mk]]
-    given in this project.  [[file:Makefile.template][A template for your Makefile]] is provided.
+    given in this project.  [[file:Makefile][A template for your Makefile]] is provided.
