@@ -12,8 +12,8 @@ ASSEMBLIES = HelloWorld.exe HowdyWorld.exe Hello.dll Howdy.dll
 OUTDIR = bin/
 
 # Dependencies per assembly
-HelloWorld.exe_sources = Hello.fs World.fs
-HowdyWorld.exe_sources = Howdy.fs World.fs
+HelloWorld.exe_sources = World.fs Hello.dll
+HowdyWorld.exe_sources = World.fs Howdy.dll
 Hello.dll_sources = Hello.fs
 Howdy.dll_sources = Howdy.fs
 
