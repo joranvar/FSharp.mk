@@ -14,7 +14,7 @@ fsharp: $(addprefix $(OUTDIR),$(ASSEMBLIES))
 define FSHARP_template =
  $(OUTDIR)$(1): | $(OUTDIR)
  $(OUTDIR)$(1): $$($(1)_sources)
-	$$(FSC) -o $$@ $$<
+	$$(FSC) -o $$@ $$^
 	ln -sf $$(FSharp.Core.dll) $(OUTDIR)
 endef
 
