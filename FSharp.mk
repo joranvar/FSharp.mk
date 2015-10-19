@@ -7,7 +7,7 @@ MONO ?= env mono
 FSharp.Core.dll ?= /nix/store/9nvx5380w2md40yzr63hbyh22aafsw4j-fsharp-3.1.2.5/lib/mono/4.5/FSharp.Core.dll
 
 # Phony targets: ignore files with those names
-.PHONY: fsharp
+.PHONY: fsharp nugetclean
 
 # Move output assemblies to $(OUTDIR)
 fsharp: $(addprefix $(OUTDIR),$(ASSEMBLIES))
@@ -75,3 +75,6 @@ $(foreach nuget,$(all_nugets),$(eval $(call NUGET_template,$(nuget),$(addprefix 
 # How to make a directory
 %/:
 	mkdir -p $@
+
+nugetclean:
+	$(RM) -r $(NUGETDIR)

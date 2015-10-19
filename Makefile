@@ -1,5 +1,5 @@
 # Phony targets: ignore files with those names
-.PHONY: all clean fsharp
+.PHONY: all clean fsharp nugetclean
 
 # Where to look for source files
 VPATH = src
@@ -21,9 +21,8 @@ Howdy.dll_sources = Howdy.fs Question.dll
 Question.dll_sources = Question.fs -r:System.Runtime.Serialization.dll
 TestNuget.exe_sources = TestNuget.fs FsCheck<lib/net45/FsCheck.dll>
 
-# This provides the fsharp target
+# This provides the fsharp and nugetclean targets
 include FSharp.mk
 
 clean:
 	$(RM) -r $(OUTDIR)
-	$(RM) -r $(NUGETDIR)
