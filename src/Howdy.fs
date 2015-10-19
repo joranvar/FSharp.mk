@@ -1,3 +1,3 @@
 module FirstWord
 
-let word = "Howdy"
+let word = sprintf "%sdy" Question.question

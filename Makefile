@@ -8,14 +8,15 @@ VPATH = src
 all: fsharp
 
 # Output
-ASSEMBLIES = HelloWorld.exe HowdyWorld.exe Hello.dll Howdy.dll
+ASSEMBLIES = HelloWorld.exe HowdyWorld.exe Hello.dll Howdy.dll Question.dll
 OUTDIR = bin/
 
 # Dependencies per assembly
 HelloWorld.exe_sources = World.fs Hello.dll
 HowdyWorld.exe_sources = World.fs Howdy.dll
 Hello.dll_sources = Hello.fs
-Howdy.dll_sources = Howdy.fs
+Howdy.dll_sources = Howdy.fs Question.dll
+Question.dll_sources = Question.fs
 
 # This provides the fsharp target
 include FSharp.mk
