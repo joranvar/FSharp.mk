@@ -25,3 +25,4 @@ include FSharp.mk
 
 clean:
 	$(RM) -r $(OUTDIR)
+	$(RM) -r $(NUGETDIR)
