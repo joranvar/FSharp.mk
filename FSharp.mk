@@ -23,17 +23,30 @@ define FSHARP_NUGET_template =
  endif
 endef
 
+define COPY_template =
+ ifndef $(1)_has_copy_target
+  $(1)_has_copy_target = 1
+
+  $(1)
+	cp $$^ $$@
+ endif
+endef
+
 # FSharp executable assembly template
 define FSHARP_template =
  ifndef $(1)_has_target
   $(1)_has_target = 1
   $(1)_nuget_refs = $$(filter %.dll>,$$($(1)_sources))
   $(1)_nuget_dlls = $$(addprefix $(OUTDIR),$$(patsubst %>,%,$$(notdir $$($(1)_nuget_refs))))
-
   $$(foreach ref,$$($(1)_nuget_refs),$$(eval $$(call FSHARP_NUGET_template,$$(ref))))
+
+  $(1)_native_dlls = $$(addprefix :,$$(filter %.so,$$($(1)_sources)))
+  $(1)_native_targets = $$(addprefix $(OUTDIR),$$(notdir $$($(1)_native_dlls)))
+  $$(foreach copy,$$(join $$($(1)_native_targets),$$($(1)_native_dlls)),$$(eval $$(call COPY_template,$$(copy))))
 
   $(OUTDIR)$(1): | $(OUTDIR)
   $(OUTDIR)$(1): | $(OUTDIR)FSharp.Core.dll
+  $(OUTDIR)$(1): | $$($(1)_native_targets)
   $(OUTDIR)$(1): $$(filter %.fs,$$($(1)_sources))
   $(OUTDIR)$(1): $$($(1)_nuget_dlls)
   $(OUTDIR)$(1): $$(addprefix $(OUTDIR),$$(filter-out -r:%,$$(filter %.dll,$$($(1)_sources))))
