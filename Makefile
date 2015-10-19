@@ -13,8 +13,8 @@ OUTDIR = bin/
 NUGETDIR = lib/
 
 # Dependencies per assembly
-HelloWorld.exe_sources = World.fs Hello.dll
-HowdyWorld.exe_sources = World.fs Howdy.dll
+HelloWorld.exe_sources = World.fs Hello.dll FsCheck<lib/net45/FsCheck.dll>
+HowdyWorld.exe_sources = World.fs Howdy.dll FsCheck<lib/net45/FsCheck.dll>
 Hello.dll_sources = Hello.fs
 Howdy.dll_sources = Howdy.fs Question.dll
 Question.dll_sources = Question.fs
