@@ -24,8 +24,8 @@ define FSHARP_NUGET_template =
 endef
 
 define COPY_template =
- ifndef $(1)_has_copy_target
-  $(1)_has_copy_target = 1
+ ifndef $(subst :,_from_,$(1))_has_copy_target
+  $(subst :,_from_,$(1))_has_copy_target = 1
 
   $(1)
 	cp $$^ $$@
