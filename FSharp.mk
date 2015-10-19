@@ -12,16 +12,25 @@ FSharp.Core.dll ?= /nix/store/9nvx5380w2md40yzr63hbyh22aafsw4j-fsharp-3.1.2.5/li
 # Move output assemblies to $(OUTDIR)
 fsharp: $(addprefix $(OUTDIR),$(ASSEMBLIES))
 
+define FSHARP_NUGET_template =
+ ifndef $(1)_has_target
+  $(1)_has_target = 1
+  $(1)_nuget_dlls = $(OUTDIR)$$(patsubst %>,%,$$(notdir $(1)))
+  $(1)_nuget_pkgs = $(NUGETDIR)$$(subst <,/,$$(subst >,,$(1)))
+
+  $$($(1)_nuget_dlls): $$($(1)_nuget_pkgs)
+	cp $$^ $(OUTDIR)
+ endif
+endef
+
 # FSharp executable assembly template
 define FSHARP_template =
  ifndef $(1)_has_target
   $(1)_has_target = 1
   $(1)_nuget_refs = $$(filter %.dll>,$$($(1)_sources))
   $(1)_nuget_dlls = $$(addprefix $(OUTDIR),$$(patsubst %>,%,$$(notdir $$($(1)_nuget_refs))))
-  $(1)_nuget_pkgs = $$(addprefix $(NUGETDIR),$$(subst <,/,$$(subst >,,$$($(1)_nuget_refs))))
 
-  $$($(1)_nuget_dlls): $$($(1)_nuget_pkgs)
-	cp $$^ $(OUTDIR)
+  $$(foreach ref,$$($(1)_nuget_refs),$$(eval $$(call FSHARP_NUGET_template,$$(ref))))
 
   $(OUTDIR)$(1): | $(OUTDIR)
   $(OUTDIR)$(1): | $(OUTDIR)FSharp.Core.dll
