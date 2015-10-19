@@ -37,7 +37,10 @@ define FSHARP_template =
   $(OUTDIR)$(1): $$(filter %.fs,$$($(1)_sources))
   $(OUTDIR)$(1): $$($(1)_nuget_dlls)
   $(OUTDIR)$(1): $$(addprefix $(OUTDIR),$$(filter %.dll,$$($(1)_sources)))
-	$$(FSC) $(2) -o $$@ $$(filter %.fs,$$^) $$(patsubst %,-r:%,$$(filter %.dll,$$^))
+	$$(FSC) -o:$$@\
+		$$(filter %.fs,$$^)\
+		$$(patsubst %,-r:%,$$(filter %.dll,$$^))\
+		--nologo $(2)
  endif
 endef
 
@@ -52,8 +55,8 @@ $(NUGET): | $(dir $(NUGET))
 
 # Nuget dependency template
 define NUGET_template =
- $(sort $(2)): | $(NUGET) $(NUGETDIR)
-	$(MONO) $(NUGET) install -ExcludeVersion $(1) -OutputDirectory $(NUGETDIR)
+ $(sort $(2)): | $(NUGET)
+	$(MONO) $(NUGET) install $(1) -ExcludeVersion -OutputDirectory $(NUGETDIR) -Verbosity quiet
 endef
 
 all_sources = $(foreach var,$(filter %.dll_sources,$(.VARIABLES)) $(filter %.exe_sources,$(.VARIABLES)),$(value $(var)))
