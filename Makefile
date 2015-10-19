@@ -8,7 +8,7 @@ VPATH = src
 all: fsharp
 
 # Output
-ASSEMBLIES = HelloWorld.exe HowdyWorld.exe Question.dll
+ASSEMBLIES = HelloWorld.exe HowdyWorld.exe Question.dll TestNuget.exe
 OUTDIR = bin/
 
 # Dependencies per assembly
@@ -17,6 +17,7 @@ HowdyWorld.exe_sources = World.fs Howdy.dll
 Hello.dll_sources = Hello.fs
 Howdy.dll_sources = Howdy.fs Question.dll
 Question.dll_sources = Question.fs
+TestNuget.exe_sources = TestNuget.fs FsCheck<lib/net45/FsCheck.dll>
 
 # This provides the fsharp target
 include FSharp.mk
