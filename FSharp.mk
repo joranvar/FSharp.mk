@@ -51,7 +51,7 @@ $(foreach exe,$(filter %.exe,$(ASSEMBLIES)),$(eval $(call FSHARP_template,$(exe)
 $(foreach dll,$(filter %.dll,$(ASSEMBLIES)),$(eval $(call FSHARP_template,$(dll),-a)))
 $(foreach dll,$(patsubst %.dll_sources,%.dll,$(filter %.dll_sources,$(.VARIABLES))),$(eval $(call FSHARP_template,$(dll),-a)))
 
-NUGET = $(NUGETDIR)nuget/NuGet.exe
+NUGET = $(TOOLSDIR)nuget/NuGet.exe
 
 $(NUGET): | $(dir $(NUGET))
 	$(CURL) -SsL http://nuget.org/nuget.exe -o $@

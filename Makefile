@@ -11,6 +11,7 @@ all: fsharp
 ASSEMBLIES = HelloWorld.exe HowdyWorld.exe Question.dll TestNuget.exe
 OUTDIR = bin/
 NUGETDIR = lib/
+TOOLSDIR = tools/
 
 # Dependencies per assembly
 HelloWorld.exe_sources = World.fs Hello.dll FsCheck<lib/net45/FsCheck.dll>
