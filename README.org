@@ -1,9 +1,7 @@
 #+TITLE: FSharp.mk
 #+AUTHOR: Bart Post
 
-* FSharp.mk
-
-** A Makefile inclusion to build F# projects without xml
+* A Makefile inclusion to build F# projects without xml
 
    FSharp.mk aims to replace all .sln and .fsproj files from an F#
    project.  As of the moment of this writing, those both are not
@@ -13,7 +11,7 @@
    long enough to be able to do almost anything in the way of building
    projects.
 
-** Why?
+* Why?
 
    Quoting [[http://fsharp.org/guides/mac-linux-cross-platform/#fsproj-and-sln-files][fsharp.org]]:
 
@@ -35,26 +33,26 @@ F# command-line compiler (fsharpc) can be used with Makefiles in the usual way.
 
    Which is exactly what this project intends to do.
 
-** How to use it
+* How to use it
 
-*** Prerequisites
+** Prerequisites
 
     At this moment, I am developing it on a [[https://nixos.org/][NixOS]] machine, so I can
     tell you about its prerequisites.
 
-**** [[https://www.gnu.org/software/make/][GNU Make]], of course
+*** [[https://www.gnu.org/software/make/][GNU Make]], of course
 
      May be installed from a package called =gnumake=.  On Ubuntu, it
      seems to be in =build-essential=.  But it could already be on
      your system.
 
-**** [[http://fsharp.org/][The FSharp compiler]]
+*** [[http://fsharp.org/][The FSharp compiler]]
 
      This provides the fsharpc command, needed to compile your code.
      There's probably a package called =fsharp=, which will require
      the =mono= package as well.
 
-*** Creating a project
+** Creating a project
 
     As with all Make projects, you will need to provide a Makefile
     that describes the way that sources combine to your final
