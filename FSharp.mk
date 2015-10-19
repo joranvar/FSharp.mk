@@ -10,15 +10,15 @@ FSharp.Core.dll ?= /nix/store/9nvx5380w2md40yzr63hbyh22aafsw4j-fsharp-3.1.2.5/li
 # Move output assemblies to $(OUTDIR)
 fsharp: $(addprefix $(OUTDIR),$(ASSEMBLIES))
 
-# FSharp assembly template
-define FSHARP_template =
+# FSharp executable assembly template
+define FSHARP_exe_template =
  $(OUTDIR)$(1): | $(OUTDIR)
  $(OUTDIR)$(1): $$($(1)_sources)
 	$$(FSC) -o $$@ $$^
 	ln -sf $$(FSharp.Core.dll) $(OUTDIR)
 endef
 
-$(foreach assembly,$(ASSEMBLIES),$(eval $(call FSHARP_template,$(assembly))))
+$(foreach executable,$(filter %.exe,$(ASSEMBLIES)),$(eval $(call FSHARP_exe_template,$(executable))))
 
 # How to make a directory
 %/:
