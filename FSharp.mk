@@ -15,6 +15,10 @@ define FSHARP_template =
  ifndef $(1)_has_target
   $(1)_has_target = 1
   $(1)_nuget_dlls = $$(addprefix $(OUTDIR),$$(patsubst %>,%,$$(notdir $$(filter %.dll>,$$($(1)_sources)))))
+  $(1)_nuget_pkgs = $$(addprefix $(NUGETDIR),$$(subst <,/,$$(subst >,,$$(filter %.dll>,$$($(1)_sources)))))
+
+  $$($(1)_nuget_dlls): $$($(1)_nuget_pkgs)
+	cp $$^ $(OUTDIR)
 
   $(OUTDIR)$(1): | $(OUTDIR)
   $(OUTDIR)$(1): | $(OUTDIR)FSharp.Core.dll
