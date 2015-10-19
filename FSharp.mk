@@ -12,11 +12,14 @@ fsharp: $(addprefix $(OUTDIR),$(ASSEMBLIES))
 
 # FSharp executable assembly template
 define FSHARP_template =
- $(OUTDIR)$(1): | $(OUTDIR)
- $(OUTDIR)$(1): | $(OUTDIR)FSharp.Core.dll
- $(OUTDIR)$(1): $$(filter %.fs,$$($(1)_sources))
- $(OUTDIR)$(1): $$(addprefix $(OUTDIR),$$(filter %.dll,$$($(1)_sources)))
+ ifndef $(1)_has_target
+  $(1)_has_target = 1
+  $(OUTDIR)$(1): | $(OUTDIR)
+  $(OUTDIR)$(1): | $(OUTDIR)FSharp.Core.dll
+  $(OUTDIR)$(1): $$(filter %.fs,$$($(1)_sources))
+  $(OUTDIR)$(1): $$(addprefix $(OUTDIR),$$(filter %.dll,$$($(1)_sources)))
 	$$(FSC) $(2) -o $$@ $$(filter %.fs,$$^) $$(patsubst %,-r:%,$$(filter %.dll,$$^))
+ endif
 endef
 
 $(foreach exe,$(filter %.exe,$(ASSEMBLIES)),$(eval $(call FSHARP_template,$(exe))))
