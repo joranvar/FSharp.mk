@@ -12,7 +12,7 @@ ASSEMBLIES = HelloWorld.exe
 OUTDIR = bin/
 
 # Dependencies per assembly
-HelloWorld.exe_sources = HelloWorld.fs
+HelloWorld.exe_sources = Hello.fs World.fs
 
 # This provides the fsharp target
 include FSharp.mk
