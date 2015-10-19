@@ -14,9 +14,12 @@ fsharp: $(addprefix $(OUTDIR),$(ASSEMBLIES))
 define FSHARP_template =
  ifndef $(1)_has_target
   $(1)_has_target = 1
+  $(1)_nuget_dlls = $$(addprefix $(OUTDIR),$$(patsubst %>,%,$$(notdir $$(filter %.dll>,$$($(1)_sources)))))
+
   $(OUTDIR)$(1): | $(OUTDIR)
   $(OUTDIR)$(1): | $(OUTDIR)FSharp.Core.dll
   $(OUTDIR)$(1): $$(filter %.fs,$$($(1)_sources))
+  $(OUTDIR)$(1): $$($(1)_nuget_dlls)
   $(OUTDIR)$(1): $$(addprefix $(OUTDIR),$$(filter %.dll,$$($(1)_sources)))
 	$$(FSC) $(2) -o $$@ $$(filter %.fs,$$^) $$(patsubst %,-r:%,$$(filter %.dll,$$^))
  endif

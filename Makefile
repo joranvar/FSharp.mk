@@ -10,6 +10,7 @@ all: fsharp
 # Output
 ASSEMBLIES = HelloWorld.exe HowdyWorld.exe Question.dll TestNuget.exe
 OUTDIR = bin/
+NUGETDIR = lib/
 
 # Dependencies per assembly
 HelloWorld.exe_sources = World.fs Hello.dll
