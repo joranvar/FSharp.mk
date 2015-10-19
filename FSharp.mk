@@ -24,8 +24,9 @@ $(foreach executable,$(filter %.exe,$(ASSEMBLIES)),$(eval $(call FSHARP_exe_temp
 # FSharp dll assembly template
 define FSHARP_dll_template =
  $(OUTDIR)$(1): | $(OUTDIR)
- $(OUTDIR)$(1): $$($(1)_sources)
-	$$(FSC) -a -o $$@ $$^
+ $(OUTDIR)$(1): $$(filter %.fs,$$($(1)_sources))
+ $(OUTDIR)$(1): $$(addprefix $(OUTDIR),$$(filter %.dll,$$($(1)_sources)))
+	$$(FSC) -a -o $$@ $$(filter %.fs,$$^) $$(patsubst %,-r:%,$$(filter %.dll,$$^))
 endef
 
 $(foreach dll,$(filter %.dll,$(ASSEMBLIES)),$(eval $(call FSHARP_dll_template,$(dll))))
