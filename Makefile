@@ -9,6 +9,7 @@ all: fsharp
 
 # Output
 ASSEMBLIES = HelloWorld.exe
+OUTDIR = bin/
 
 # Dependencies per assembly
 HelloWorld.exe_sources = HelloWorld.fs
@@ -17,4 +18,4 @@ HelloWorld.exe_sources = HelloWorld.fs
 include FSharp.mk
 
 clean:
-	$(RM) $(ASSEMBLIES)
+	$(RM) -r $(OUTDIR)

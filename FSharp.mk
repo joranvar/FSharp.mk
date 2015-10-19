@@ -7,13 +7,19 @@ FSharp.Core.dll ?= /nix/store/9nvx5380w2md40yzr63hbyh22aafsw4j-fsharp-3.1.2.5/li
 # Phony targets: ignore files with those names
 .PHONY: fsharp
 
-fsharp: $(ASSEMBLIES)
+# Move output assemblies to $(OUTDIR)
+fsharp: $(addprefix $(OUTDIR),$(ASSEMBLIES))
 
 # FSharp assembly template
 define FSHARP_template =
- $(1): $$($(1)_sources)
+ $(OUTDIR)$(1): | $(OUTDIR)
+ $(OUTDIR)$(1): $$($(1)_sources)
 	$$(FSC) -o $$@ $$<
-	ln -s $$(FSharp.Core.dll) $(dir $(1))
+	ln -sf $$(FSharp.Core.dll) $(OUTDIR)
 endef
 
 $(foreach assembly,$(ASSEMBLIES),$(eval $(call FSHARP_template,$(assembly))))
+
+# How to make a directory
+%/:
+	mkdir -p $@
