@@ -8,7 +8,7 @@ VPATH = src
 all: fsharp
 
 # Output
-ASSEMBLIES = HelloWorld.exe HowdyWorld.exe
+ASSEMBLIES = HelloWorld.exe HowdyWorld.exe Question.dll
 OUTDIR = bin/
 
 # Dependencies per assembly
