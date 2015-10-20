@@ -88,9 +88,9 @@ define NUGET_template =
 	$(MONO) $(NUGET) install $(1) -ExcludeVersion -OutputDirectory $(NUGETDIR) -Verbosity quiet
 endef
 
-all_sources = $(foreach var,$(filter %.dll_sources,$(.VARIABLES)) $(filter %.exe_sources,$(.VARIABLES)),$(value $(var)))
-all_nuget_refs = $(filter %.dll>,$(all_sources))
-all_nugets = $(firstword $(subst <, ,$(subst >, ,$(all_nuget_refs))))
+all_sources := $(foreach var,$(filter %.dll_sources,$(.VARIABLES)) $(filter %.exe_sources,$(.VARIABLES)),$(value $(var)))
+all_nuget_refs := $(filter %.dll>,$(all_sources))
+all_nugets := $(firstword $(subst <, ,$(subst >, ,$(all_nuget_refs))))
 
 $(foreach nuget,$(all_nugets),$(eval $(call NUGET_template,$(nuget),$(addprefix $(NUGETDIR),$(subst <,/,$(subst >,,$(filter $(nuget)%,$(all_nuget_refs))))))))
 
