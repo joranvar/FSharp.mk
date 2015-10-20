@@ -16,8 +16,8 @@ define COPY_template =
  ifndef $(subst :,_from_,$(1))_has_copy_target
   $(subst :,_from_,$(1))_has_copy_target = 1
 
-  $(1)
-	ln -s $$(abspath $$^) $$@
+  $(1) | $(2)
+	ln -s $$(abspath $$^) $$(@D)/
  endif
 endef
 
@@ -30,18 +30,23 @@ define FSHARP_template =
 
   $(1)_nuget_dlls = $$(addprefix :$(NUGETDIR),$$(subst <,/,$$(subst >,,$$(filter %.dll>,$$($(1)_sources)))))
   $(1)_nuget_targets = $$(addprefix $$($(1)_outdir),$$(notdir $$($(1)_nuget_dlls)))
-  $$(foreach copy,$$(join $$($(1)_nuget_targets),$$($(1)_nuget_dlls)),$$(eval $$(call COPY_template,$$(copy))))
+  $$(foreach copy,$$(join $$($(1)_nuget_targets),$$($(1)_nuget_dlls)),$$(eval $$(call COPY_template,$$(copy),$$($(1)_outdir))))
 
   $(1)_native_dlls = $$(addprefix :,$$(filter %.so,$$($(1)_sources)))
   $(1)_native_targets = $$(addprefix $$($(1)_outdir),$$(notdir $$($(1)_native_dlls)))
-  $$(foreach copy,$$(join $$($(1)_native_targets),$$($(1)_native_dlls)),$$(eval $$(call COPY_template,$$(copy))))
+  $$(foreach copy,$$(join $$($(1)_native_targets),$$($(1)_native_dlls)),$$(eval $$(call COPY_template,$$(copy),$$($(1)_outdir))))
+
+  $(1)_own_asms = $$(filter-out -r:%,$$(filter %.dll,$$($(1)_sources)))
+  $(1)_own_asms_orig_targets = $$(addprefix :$(OUTDIR),$$(join $$(addsuffix /,$$(basename $$($(1)_own_asms))),$$($(1)_own_asms)))
+  $(1)_own_asms_targets = $$(addprefix $$($(1)_outdir),$$(notdir $$($(1)_own_asms)))
+  $$(foreach copy,$$(join $$($(1)_own_asms_targets),$$($(1)_own_asms_orig_targets)),$$(eval $$(call COPY_template,$$(copy),$$($(1)_outdir))))
 
   $$($(1)_outdir)$(1): | $$($(1)_outdir)
   $$($(1)_outdir)$(1): | $$($(1)_outdir)FSharp.Core.dll
   $$($(1)_outdir)$(1): | $$($(1)_native_targets)
   $$($(1)_outdir)$(1): $$(filter %.fs,$$($(1)_sources))
   $$($(1)_outdir)$(1): $$($(1)_nuget_targets)
-  $$($(1)_outdir)$(1): $$(addprefix $$($(1)_outdir),$$(filter-out -r:%,$$(filter %.dll,$$($(1)_sources))))
+  $$($(1)_outdir)$(1): $$($(1)_own_asms_targets)
 	$$(FSC) -o:$$@\
 		$$(filter %.fs,$$^)\
 		$$(patsubst %,-r:%,$$(filter %.dll,$$^))\
