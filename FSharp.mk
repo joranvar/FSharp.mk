@@ -12,6 +12,17 @@ FSharp.Core.dll ?= /nix/store/9nvx5380w2md40yzr63hbyh22aafsw4j-fsharp-3.1.2.5/li
 # Move output assemblies to $(OUTDIR)
 fsharp: $(addprefix $(OUTDIR),$(join $(addsuffix /,$(basename $(ASSEMBLIES))),$(ASSEMBLIES)))
 
+# Define outdir variables for each assembly, be they intermediate or target
+define DEFINE_outdir =
+ ifeq ($(filter $(ASSEMBLIES),$(1)),)
+  $(1)_outdir = $(OBJDIR)$(basename $(1))/
+ else
+  $(1)_outdir = $(OUTDIR)$(basename $(1))/
+ endif
+endef
+
+$(foreach asm,$(patsubst %_sources,%,$(filter %.dll_sources %.exe_sources,$(.VARIABLES))),$(eval $(call DEFINE_outdir,$(asm))))
+
 define COPY_template =
  ifndef $(subst :,_from_,$(1))_has_copy_target
   $(subst :,_from_,$(1))_has_copy_target = 1
@@ -35,8 +46,6 @@ define FSHARP_template =
  ifndef $(1)_has_target
   $(1)_has_target = 1
 
-  $(1)_outdir = $(OUTDIR)$(basename $(1))/
-
   $(1)_nuget_dlls = $$(addprefix :$(NUGETDIR),$$(subst <,/,$$(subst >,,$$(filter %.dll>,$$($(1)_sources)))))
   $(1)_nuget_targets = $$(addprefix $$($(1)_outdir),$$(notdir $$($(1)_nuget_dlls)))
   $$(foreach copy,$$(join $$($(1)_nuget_targets),$$($(1)_nuget_dlls)),$$(eval $$(call COPY_template,$$(copy),$$($(1)_outdir))))
@@ -46,7 +55,7 @@ define FSHARP_template =
   $$(foreach copy,$$(join $$($(1)_native_targets),$$($(1)_native_dlls)),$$(eval $$(call COPY_template,$$(copy),$$($(1)_outdir))))
 
   $(1)_own_asms = $$(filter-out -r:%,$$(filter %.dll,$$($(1)_sources)))
-  $(1)_own_asms_orig_targets = $$(addprefix :$(OUTDIR),$$(join $$(addsuffix /,$$(basename $$($(1)_own_asms))),$$($(1)_own_asms)))
+  $(1)_own_asms_orig_targets = $$(addprefix :,$$(foreach asm,$$($(1)_own_asms),$$($$(asm)_outdir)$$(asm)))
   $(1)_own_asms_targets = $$(addprefix $$($(1)_outdir),$$(notdir $$($(1)_own_asms)))
   $$(foreach copy,$$(join $$($(1)_own_asms_targets),$$($(1)_own_asms_orig_targets)),$$(eval $$(call COPY_DIR_template,$$(copy),$$($(1)_outdir))))
 
