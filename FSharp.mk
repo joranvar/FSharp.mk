@@ -90,7 +90,7 @@ endef
 
 all_sources := $(foreach var,$(filter %.dll_sources,$(.VARIABLES)) $(filter %.exe_sources,$(.VARIABLES)),$(value $(var)))
 all_nuget_refs := $(filter %.dll>,$(all_sources))
-all_nugets := $(foreach nuget_ref,$(all_nuget_refs),$(firstword $(subst <, ,$(subst >, ,$(nuget_ref)))))
+all_nugets := $(sort $(foreach nuget_ref,$(all_nuget_refs),$(firstword $(subst <, ,$(subst >, ,$(nuget_ref))))))
 
 $(foreach nuget,$(all_nugets),$(eval $(call NUGET_template,$(nuget),$(addprefix $(NUGETDIR),$(subst <,/,$(subst >,,$(filter $(nuget)%,$(all_nuget_refs))))))))
 
