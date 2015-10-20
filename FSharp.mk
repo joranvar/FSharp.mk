@@ -17,7 +17,7 @@ define COPY_template =
   $(subst :,_from_,$(1))_has_copy_target = 1
 
   $(1) | $(2)
-	ln -s $$(abspath $$^) $$(@D)/
+	cp -u $$(abspath $$^) $$(@D)/
  endif
 endef
 
@@ -26,7 +26,7 @@ define COPY_DIR_template =
   $(subst :,_from_,$(1))_has_copy_dir_target = 1
 
   $(1) | $(2)
-	ln -sf $$(abspath $$(^D)/*) $$(@D)/
+	cp -u $$(abspath $$(^D)/*) $$(@D)/
  endif
 endef
 
@@ -85,9 +85,9 @@ all_nugets = $(firstword $(subst <, ,$(subst >, ,$(all_nuget_refs))))
 
 $(foreach nuget,$(all_nugets),$(eval $(call NUGET_template,$(nuget),$(addprefix $(NUGETDIR),$(subst <,/,$(subst >,,$(filter $(nuget)%,$(all_nuget_refs))))))))
 
-# Link FSharp.Core.dll to where it's needed
+# Copy FSharp.Core.dll to where it's needed
 %/FSharp.Core.dll:
-	ln -s $(abspath $(FSharp.Core.dll)) $(@D)
+	cp -u $(abspath $(FSharp.Core.dll)) $(@D)
 
 # How to make a directory
 %/:
