@@ -17,7 +17,7 @@ define COPY_template =
   $(subst :,_from_,$(1))_has_copy_target = 1
 
   $(1)
-	cp $$^ $$@
+	ln -s $$(abspath $$^) $$@
  endif
 endef
 
@@ -70,7 +70,7 @@ $(foreach nuget,$(all_nugets),$(eval $(call NUGET_template,$(nuget),$(addprefix 
 
 # Link FSharp.Core.dll to where it's needed
 %/FSharp.Core.dll:
-	ln -sf $(FSharp.Core.dll) $(OUTDIR)
+	ln -s $(abspath $(FSharp.Core.dll)) $(OUTDIR)
 
 # How to make a directory
 %/:
