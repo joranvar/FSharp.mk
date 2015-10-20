@@ -10,7 +10,7 @@ FSharp.Core.dll ?= /nix/store/9nvx5380w2md40yzr63hbyh22aafsw4j-fsharp-3.1.2.5/li
 .PHONY: fsharp nugetclean
 
 # Move output assemblies to $(OUTDIR)
-fsharp: $(addprefix $(OUTDIR),$(ASSEMBLIES))
+fsharp: $(addprefix $(OUTDIR),$(join $(addsuffix /,$(basename $(ASSEMBLIES))),$(ASSEMBLIES)))
 
 define COPY_template =
  ifndef $(subst :,_from_,$(1))_has_copy_target
