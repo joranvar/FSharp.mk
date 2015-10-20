@@ -10,6 +10,7 @@ all: fsharp
 # Output
 ASSEMBLIES = HelloWorld.exe HowdyWorld.exe Question.dll TestNuget.exe
 OUTDIR = bin/
+OBJDIR = obj/
 NUGETDIR = lib/
 TOOLSDIR = tools/
 
@@ -26,3 +27,4 @@ include FSharp.mk
 
 clean:
 	$(RM) -r $(OUTDIR)
+	$(RM) -r $(OBJDIR)
