@@ -21,6 +21,15 @@ define COPY_template =
  endif
 endef
 
+define COPY_DIR_template =
+ ifndef $(subst :,_from_,$(1))_has_copy_dir_target
+  $(subst :,_from_,$(1))_has_copy_dir_target = 1
+
+  $(1) | $(2)
+	ln -sf $$(abspath $$(^D)/*) $$(@D)/
+ endif
+endef
+
 # FSharp executable assembly template
 define FSHARP_template =
  ifndef $(1)_has_target
@@ -39,7 +48,7 @@ define FSHARP_template =
   $(1)_own_asms = $$(filter-out -r:%,$$(filter %.dll,$$($(1)_sources)))
   $(1)_own_asms_orig_targets = $$(addprefix :$(OUTDIR),$$(join $$(addsuffix /,$$(basename $$($(1)_own_asms))),$$($(1)_own_asms)))
   $(1)_own_asms_targets = $$(addprefix $$($(1)_outdir),$$(notdir $$($(1)_own_asms)))
-  $$(foreach copy,$$(join $$($(1)_own_asms_targets),$$($(1)_own_asms_orig_targets)),$$(eval $$(call COPY_template,$$(copy),$$($(1)_outdir))))
+  $$(foreach copy,$$(join $$($(1)_own_asms_targets),$$($(1)_own_asms_orig_targets)),$$(eval $$(call COPY_DIR_template,$$(copy),$$($(1)_outdir))))
 
   $$($(1)_outdir)$(1): | $$($(1)_outdir)
   $$($(1)_outdir)$(1): | $$($(1)_outdir)FSharp.Core.dll
