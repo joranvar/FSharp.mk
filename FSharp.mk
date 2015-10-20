@@ -73,7 +73,7 @@ $(foreach nuget,$(all_nugets),$(eval $(call NUGET_template,$(nuget),$(addprefix 
 
 # Link FSharp.Core.dll to where it's needed
 %/FSharp.Core.dll:
-	ln -s $(abspath $(FSharp.Core.dll)) $(OUTDIR)
+	ln -s $(abspath $(FSharp.Core.dll)) $(@D)
 
 # How to make a directory
 %/:
