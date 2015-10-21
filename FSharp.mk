@@ -63,10 +63,12 @@ define FSHARP_template =
   $$($(1)_outdir)$(1): | $$($(1)_outdir)FSharp.Core.dll
   $$($(1)_outdir)$(1): | $$($(1)_native_targets)
   $$($(1)_outdir)$(1): $$(filter %.fs,$$($(1)_sources))
+  $$($(1)_outdir)$(1): $$(filter %.fsx,$$($(1)_sources))
   $$($(1)_outdir)$(1): $$($(1)_nuget_targets)
   $$($(1)_outdir)$(1): $$($(1)_own_asms_targets)
 	$$(FSC) -o:$$@\
 		$$(filter %.fs,$$^)\
+		$$(filter %.fsx,$$^)\
 		$$(patsubst %,-r:%,$$(filter %.dll,$$^))\
 		$$(filter -r:%.dll,$$($(1)_sources))\
 		--nologo $(2)
